@@ -5,6 +5,10 @@ visualize_csv.ipynb:
 	Visualize out data in a similar fashion as is done in crowdsignals_ch2.py
 
 
+Smartphones used:
+	- LG Nexus 5
+	- elephone p9000
+
 Smartphone-App used: SensorLog
 
 Sensors used:
