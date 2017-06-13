@@ -43,7 +43,7 @@ class CreateDataset():
     def add_numerical_dataset(self, file, timestamp_col, value_cols, aggregation='avg', prefix=''):
         dataset = pd.read_csv(self.base_dir + file, skipinitialspace=True)
         # Convert timestamps to dates
-        dataset[timestamp_col] = pd.to_datetime(dataset[timestamp_col],unit='s')
+        dataset[timestamp_col] = pd.to_datetime(dataset[timestamp_col],unit='ms')
 
         # Create a table based on the times found in the dataset
         if self.data_table is None:
