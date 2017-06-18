@@ -1,6 +1,12 @@
 import os
 import json
 import ast
+from itertools import izip
+import pandas as pd
+def pairwise(iterable):
+    "s -> (s0, s1), (s2, s3), (s4, s5), ..."
+    a = iter(iterable)
+    return izip(a, a)
 
 def get_labels(fname):
     label_mappings = {}
@@ -72,15 +78,41 @@ def get_sensor_values2(fname,device='log1'):
             
     return sensor_dict,labels_dict
 
-def generate_labels2(values,header=['device','label','label_start','label_end'],fname='./data/toy_data/csv/labels.csv'):
-    label_mapping = get_sensor_values(fname)
+
+def generate_labels(header=['sensor_type','device','label','label_start','datetime_start','label_end','datetime_end'],
+                    fname='./ml4qsbeasts/log_events',log_fname='./ml4qsbeasts/new_log',fout='./ml4qsbeasts/labels.csv'):
     
+    label_mapping = get_labels(log_fname)
+    labels_list = []
+    lines_list = []
     with open(fname,'r+') as f:
         for line in f.readlines():
-            splitted = line.split('|')
-            if len(splitted) != 4:
-                continue
-            splitted = [x.rstrip().lower() for x in splitted]
+            lines_list.append(line)
+    
+    for line,line2 in pairwise(lines_list):
+ 
+        splitted = line.split('|')
+        splitted = [x.rstrip().lower() for x in splitted]
+        label,_,_,time_start = splitted
+
+        splitted = line2.split('|')
+        splitted = [x.rstrip().lower() for x in splitted]
+        label,_,_,time_end = splitted
+        for k in label_mapping.keys():
+            if int(label) in label_mapping[k]:
+                key = k
+        
+        labels_list.append(['interval_label','tommie smartphone',
+                              key,time_start,pd.to_datetime(time_start,unit='ms'),
+                            time_end,pd.to_datetime(time_end,unit='ms')])
+        
+    
+    with open(fout,'w+') as f:
+        f.write(','.join([str(x) for x in header])+'\n')
+        for line in labels_list:
+            line = ','.join([str(x) for x in line])
+            f.write(line+'\n')
+    return labels_list
             
               
     
@@ -108,11 +140,7 @@ def generate_csv2(values,header=['x','y','z','timestamp'],label_only='2',fname='
             f.write(line)
 
             
-def generate_labels(values,header['device','label','label_start','label_end'],
-                    fname='./ml4qsbeasts/log_events',fout='./ml4qsbeasts/labels.csv):
-    label_mapping = get_sensor_values(fname)
-    with open(fname,'r+') as f:
-        with open(fout,'w+') as f2:
+
             
                   
               
@@ -128,7 +156,6 @@ def get_sensor_values(fname,device='log1'):
     '''
     sensor_dict = {}
     device = fname.split('/')[len(fname.split('/'))-1]
-    print('The device is %s'%device)
     labels_dict = {}
     label_names = get_labels(fname)
     print(label_names)
