@@ -1,4 +1,4 @@
-sensor_type,device,label,label_start,label_end
+sensor_type,device,label,label_start,datetime_start,label_end,datetime_end
 interval_label,tommie smartphone,stairsdown,1498010210795,2017-06-21 01:56:50.795000,1498010250904,2017-06-21 01:57:30.904000
 interval_label,tommie smartphone,stairsup,1498010251062,2017-06-21 01:57:31.062000,1498010297381,2017-06-21 01:58:17.381000
 interval_label,tommie smartphone,standing,1498010297414,2017-06-21 01:58:17.414000,1498010337044,2017-06-21 01:58:57.044000
