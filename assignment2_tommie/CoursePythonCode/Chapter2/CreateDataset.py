@@ -80,8 +80,8 @@ class CreateDataset():
         dataset = pd.read_csv(self.base_dir + file)
 
         # Convert timestamps to datetime.
-        dataset[start_timestamp_col] = pd.to_datetime(dataset[start_timestamp_col])
-        dataset[end_timestamp_col] = pd.to_datetime(dataset[end_timestamp_col])
+        dataset[start_timestamp_col] = pd.to_datetime(dataset[start_timestamp_col],unit='ms')
+        dataset[end_timestamp_col] = pd.to_datetime(dataset[end_timestamp_col],unit='ms')
 
         # Clean the event values in the dataset
         dataset[value_col] = dataset[value_col].apply(self.clean_name)

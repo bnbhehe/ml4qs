@@ -38,7 +38,7 @@ if not os.path.exists(result_dataset_path):
 # coarse grained, namely one measurement per minute, and secondly use four measurements
 # per second
 
-granularities = [60000, 250]
+granularities = [250]
 datasets = []
 
 for milliseconds_per_instance in granularities:
@@ -49,7 +49,7 @@ for milliseconds_per_instance in granularities:
     DataSet.add_numerical_dataset('accelerometer.csv', 'timestamp', ['x','y','z'], 'avg', 'acc_phone_')
     DataSet.add_numerical_dataset('gyroscope.csv', 'timestamp', ['x','y','z'], 'avg', 'gyr_phone_')
     DataSet.add_numerical_dataset('rotation.csv', 'timestamp', ['x','y','z', 'theta', 'phi'], 'avg', 'rot_phone_')
-
+    print('added sensory data.')
     #DataSet.add_numerical_dataset('gyroscope_smartwatch.csv', 'timestamps', ['x','y','z'], 'avg', 'gyr_watch_')
 
     # We add the heart rate (continuous numerical measurements) and aggregate by averaging again
@@ -80,10 +80,11 @@ for milliseconds_per_instance in granularities:
 
     #util.print_statistics(dataset)
     datasets.append(copy.deepcopy(dataset))
+    dataset.to_csv(result_dataset_path + str(milliseconds_per_instance)+'_custom_data.csv')
+
 
 # And print the table that has been included in the book
 
-util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
+# util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
 
 # Finally, store the last dataset we have generated (250 ms).
-dataset.to_csv(result_dataset_path + 'chapter2_result.csv')

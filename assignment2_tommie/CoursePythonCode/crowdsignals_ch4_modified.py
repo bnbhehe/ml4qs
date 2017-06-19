@@ -14,14 +14,19 @@ from Chapter4.FrequencyAbstraction import FourierTransformation
 from Chapter4.TextAbstraction import TextAbstraction
 import copy
 import pandas as pd
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    warnings.filterwarnings("ignore",category=FutureWarning)
 
 # Let us create our visualization class again.
 DataViz = VisualizeDataset()
 
 # Read the result from the previous chapter, and make sure the index is of the type datetime.
 dataset_path = './intermediate_datafiles/'
+millis = 1000
 try:
-    dataset = pd.read_csv(dataset_path + 'chapter3_result_final.csv', index_col=0)
+    dataset = pd.read_csv(dataset_path + str(millis)+'_custom_rest.csv',index_col=0)
 except IOError as e:
     print('File not found, try to run previous crowdsignals scripts first!')
     raise e
@@ -29,7 +34,7 @@ except IOError as e:
 dataset.index = dataset.index.to_datetime()
 
 # Compute the number of milliseconds covered by an instane based on the first two rows
-milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).microseconds/500
+milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).seconds*1000
 
 
 # Chapter 4: Identifying aggregate attributes.
@@ -78,6 +83,6 @@ skip_points = int((1-window_overlap) * ws)
 dataset = dataset.iloc[::skip_points,:]
 
 
-dataset.to_csv(dataset_path + 'chapter4_result.csv')
+dataset.to_csv(dataset_path + str(millis)+'_custom4.csv')
 
 #DataViz.plot_dataset(dataset, ['acc_phone_x', 'gyr_phone_x'], ['like', 'like'], ['line', 'line'])

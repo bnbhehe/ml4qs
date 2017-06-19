@@ -73,6 +73,7 @@ class FeatureSelectionClassification:
         ca = ClassificationAlgorithms()
         ce = ClassificationEvaluation()
         for i in range(0, (len(X_train.columns) - max_features)):
+            print i
             best_perf = 0
             worst_feature = ''
 

@@ -16,18 +16,23 @@ import copy
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plot
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    warnings.filterwarnings("ignore",category=FutureWarning)
 
 # Let is create our visualization class again.
 DataViz = VisualizeDataset()
 
 # Read the result from the previous chapter, and make sure the index is of the type datetime.
 dataset_path = './intermediate_datafiles/'
-dataset = pd.read_csv(dataset_path + 'chapter3_result_outliers.csv', index_col=0)
-dataset.index = dataset.index.to_datetime()
+millis = 1000
+dataset = pd.read_csv(dataset_path + str(millis)+'_custom_data_outliers.csv',index_col=0)
+dataset.index = pd.to_datetime(dataset.index)
 
 # Compute the number of milliseconds covered by an instane based on the first two rows
-milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).microseconds/1000
-
+milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).seconds*1000
+print(milliseconds_per_instance,'===========')
 # Step 2: Let us impute the missing values.
 
 MisVal = ImputationMissingValues()
@@ -51,8 +56,8 @@ for col in [c for c in dataset.columns if not 'label' in c]:
 
 # Let us try the Kalman filter on the light_phone_lux attribute and study the result.
 
-original_dataset = pd.read_csv(dataset_path + 'chapter2_result.csv', index_col=0)
-original_dataset.index = original_dataset.index.to_datetime()
+original_dataset = pd.read_csv(dataset_path + str(millis)+'_custom_data.csv',index_col=0)
+original_dataset.index = pd.to_datetime(original_dataset.index)
 KalFilter = KalmanFilters()
 kalman_dataset = KalFilter.apply_kalman_filter(original_dataset, 'acc_phone_x')
 #DataViz.plot_imputed_values(kalman_dataset, ['original', 'kalman'], 'acc_phone_x', kalman_dataset['acc_phone_x_kalman'])
@@ -66,11 +71,12 @@ LowPass = LowPassFilter()
 
 # Determine the sampling frequency.
 fs = float(1000)/milliseconds_per_instance
-cutoff = 1.5
+print(fs,'===============')
+cutoff = 0.5
 
 # Let us study acc_phone_x:
 new_dataset = LowPass.low_pass_filter(copy.deepcopy(dataset), 'acc_phone_x', fs, cutoff, order=10)
-#DataViz.plot_dataset(new_dataset.ix[int(0.4*len(new_dataset.index)):int(0.43*len(new_dataset.index)), :], ['acc_phone_x', 'acc_phone_x_lowpass'], ['exact','exact'], ['line', 'line'])
+DataViz.plot_dataset(new_dataset.ix[int(0.4*len(new_dataset.index)):int(0.43*len(new_dataset.index)), :], ['acc_phone_x', 'acc_phone_x_lowpass'], ['exact','exact'], ['line', 'line'])
 
 # And now let us include all measurements that have a form of periodicity (and filter them):
 periodic_measurements = ['acc_phone_x','acc_phone_y','acc_phone_z', 'gyr_phone_x', 'gyr_phone_y', 'gyr_phone_z', 'rot_phone_x', 'rot_phone_y', 'rot_phone_z', 'rot_phone_theta', 'rot_phone_phi']
@@ -113,4 +119,4 @@ dataset = PCA.apply_pca(copy.deepcopy(dataset), selected_predictor_cols, n_pcs)
 
 # Store the outcome.
 
-dataset.to_csv(dataset_path + 'chapter3_result_final.csv')
+dataset.to_csv(dataset_path + str(millis)+'_custom_rest.csv')

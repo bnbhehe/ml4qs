@@ -17,6 +17,10 @@ import copy
 import pandas as pd
 import matplotlib.pyplot as plot
 import util.util as util
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    warnings.filterwarnings("ignore",category=FutureWarning)
 
 
 # Of course we repeat some stuff from Chapter 3, namely to load the dataset
@@ -24,10 +28,11 @@ import util.util as util
 DataViz = VisualizeDataset()
 
 # Read the result from the previous chapter, and make sure the index is of the type datetime.
-dataset_path = './old_intermediate_datafiles/'
+dataset_path = './intermediate_datafiles/'
+millis = 1000
 
 try:
-    dataset = pd.read_csv(dataset_path + 'chapter4_result.csv', index_col=0)
+    dataset = pd.read_csv(dataset_path + str(millis)+'_custom4.csv',index_col=0)
 except IOError as e:
     print('File not found, try to run previous crowdsignals scripts first!')
     raise e
@@ -109,4 +114,4 @@ plot.show()
 
 # And we select the outcome dataset of the knn clustering....
 
-dataset_knn.to_csv(dataset_path + 'chapter5_result.csv')
+dataset_knn.to_csv(dataset_path + str(millis)+'_custom5.csv')

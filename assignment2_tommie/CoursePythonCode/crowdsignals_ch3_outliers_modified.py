@@ -13,14 +13,20 @@ from Chapter3.OutlierDetection import DistanceBasedOutlierDetection
 import copy
 import pandas as pd
 import numpy as np
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    warnings.filterwarnings("ignore",category=FutureWarning)
 
 # Let is create our visualization class again.
 DataViz = VisualizeDataset()
 
 # Read the result from the previous chapter, and make sture the index is of the type datetime.
 dataset_path = './intermediate_datafiles/'
+millis = 1000
 try:
-    dataset = pd.read_csv(dataset_path + 'chapter2_result.csv', index_col=0)
+    # dataset = pd.read_csv(dataset_path + 'chapter2_result.csv', index_col=0)
+    dataset = pd.read_csv(dataset_path + str(millis)+'_custom_data.csv',index_col=0)
 except IOError as e:
     print('File not found, try to run previous crowdsignals scripts first!')
     raise e
@@ -28,8 +34,8 @@ except IOError as e:
 dataset.index = dataset.index.to_datetime()
 
 # Compute the number of milliseconds covered by an instance based on the first two rows
-milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).microseconds/1000
-
+milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).seconds*1000
+print('===========',milliseconds_per_instance)
 # Step 1: Let us see whether we have some outliers we would prefer to remove.
 
 # Determine the columns we want to experiment on.
@@ -81,4 +87,4 @@ for col in [c for c in dataset.columns if not 'label' in c]:
     dataset.loc[dataset[col + '_outlier'] == True, col] = np.nan
     del dataset[col + '_outlier']
 
-dataset.to_csv(dataset_path + 'chapter3_result_outliers.csv')
+dataset.to_csv(dataset_path + str(millis)+'_custom_data_outliers.csv')

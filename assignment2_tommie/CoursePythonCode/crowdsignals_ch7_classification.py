@@ -31,10 +31,11 @@ DataViz = VisualizeDataset()
 # Read the result from the previous chapter, and make sure the index is of the type datetime.
 
 dataset_path = './intermediate_datafiles/'
-export_tree_path = 'Example_graphs/Chapter7/'
+export_tree_path = 'Custom_graphs/Chapter7/'
 
+millis = 1000
 try:
-    dataset = pd.read_csv(dataset_path + 'chapter5_result.csv', index_col=0)
+    dataset = pd.read_csv(dataset_path + str(millis)+'_custom5.csv', index_col=0)
 except IOError as e:
     print('File not found, try to run previous crowdsignals scripts first!')
     raise e
@@ -60,9 +61,8 @@ print 'Test set length is: ', len(test_X.index)
 
 # Select subsets of the features that we will consider:
 
-basic_features = ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_x','acc_watch_y','acc_watch_z','gyr_phone_x','gyr_phone_y','gyr_phone_z','gyr_watch_x','gyr_watch_y','gyr_watch_z',
-                  'hr_watch_rate', 'light_phone_lux','mag_phone_x','mag_phone_y','mag_phone_z','mag_watch_x','mag_watch_y','mag_watch_z','press_phone_pressure']
-pca_features = ['pca_1','pca_2','pca_3','pca_4','pca_5','pca_6','pca_7']
+basic_features = ['acc_phone_x','acc_phone_y','acc_phone_z','gyr_phone_x','gyr_phone_y','gyr_phone_z','rot_phone_x','rot_phone_y','rot_phone_z','rot_phone_theta','rot_phone_phi']
+pca_features = ['pca_1','pca_2','pca_3','pca_4']
 time_features = [name for name in dataset.columns if '_temp_' in name]
 freq_features = [name for name in dataset.columns if (('_freq' in name) or ('_pse' in name))]
 print '#basic features: ', len(basic_features)
@@ -94,7 +94,7 @@ plot.show()
 selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'press_phone_pressure_temp_mean_ws_120', 'gyr_phone_x_temp_std_ws_120',
                      'mag_watch_y_pse', 'mag_phone_z_max_freq', 'gyr_watch_y_freq_weighted', 'gyr_phone_y_freq_1.0_Hz_ws_40',
                      'acc_phone_x_freq_1.9_Hz_ws_40', 'mag_watch_z_freq_0.9_Hz_ws_40', 'acc_watch_y_freq_0.5_Hz_ws_40']
-
+selected_features = ['acc_phone_y_']
 # Let us first study the impact of regularization and model complexity: does regularization prevent overfitting?
 
 learner = ClassificationAlgorithms()
