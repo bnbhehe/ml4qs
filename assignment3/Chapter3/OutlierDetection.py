@@ -57,12 +57,12 @@ class DistributionBasedOutlierDetection:
     def mixture_model(self, data_table, col):
         # Fit a mixture model to our data.
         data = data_table[data_table[col].notnull()][col]
-        g = mixture.GMM(n_components=3, n_iter=1)
+        g = mixture.GaussianMixture(n_components=3)
 
-        g.fit(data.reshape(-1,1))
+        g.fit(data.values.reshape(-1,1))
 
         # Predict the probabilities
-        probs = g.score(data.reshape(-1,1))
+        probs = g.score(data.values.reshape(-1,1))
 
         # Create the right data frame and concatenate the two.
         data_probs = pd.DataFrame(np.power(10, probs), index=data.index, columns=[col+'_mixture'])
@@ -112,7 +112,8 @@ class DistanceBasedOutlierDetection:
         outlier_factor = []
         # Compute the outlier score per row.
         for i in range(0, len(new_data_table.index)):
-            #print i
+            if i % 250 == 0:
+                print('%dth element'%(i))
             outlier_factor.append(self.local_outlier_factor_instance(i, k))
         data_outlier_probs = pd.DataFrame(outlier_factor, index=new_data_table.index, columns=['lof'])
         data_table = pd.concat([data_table, data_outlier_probs], axis=1)

@@ -33,7 +33,7 @@ class VisualizeDataset:
             xar = [xar]
 
         f.subplots_adjust(hspace=0.4)
-        plot.hold(True)
+        # plot.hold(True)
         xfmt = md.DateFormatter('%H:%M')
 
         # Pass through the columns specified.
@@ -63,7 +63,7 @@ class VisualizeDataset:
                 else:
                     xar[i].plot(data_table.index[mask], data_table[relevant_dataset_cols[j]][mask], self.line_displays[j%len(self.line_displays)])
             xar[i].tick_params(axis='y', labelsize=10)
-            xar[i].legend(relevant_dataset_cols, fontsize='xx-small', numpoints=1, loc='upper center',  bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_dataset_cols), fancybox=True, shadow=True)
+            xar[i].legend(relevant_dataset_cols, fontsize='small', numpoints=1, loc='upper center',  bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_dataset_cols), fancybox=True, shadow=True)
             xar[i].set_ylim([min(min_values) - 0.1*(max(max_values) - min(min_values)), max(max_values) + 0.1*(max(max_values) - min(min_values))])
         # Make sure we get a nice figure with only a single x-axis and labels there.
         plot.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
@@ -77,13 +77,13 @@ class VisualizeDataset:
 
     # This function plots the real and imaginary amplitudes of the frequencies found in the Fourier transformation.
     def plot_fourier_amplitudes(self, freq, ampl_real, ampl_imag):
-        plot.hold(True)
+        # plot.hold(True)
         plot.xlabel('Freq(Hz)')
         plot.ylabel('amplitude')
         # Plot the real values as a '+' and imaginary in the same way (though with a different color).
         plot.plot(freq, ampl_real, '+', freq, ampl_imag,'+')
         plot.legend(['real', 'imaginary'], numpoints=1)
-        plot.hold(False)
+        # plot.hold(False)
         plot.show()
 
     # Plot outliers in case of a binary outlier score. Here, the col specifies the real data
@@ -92,7 +92,7 @@ class VisualizeDataset:
         data_table = data_table.dropna(axis=0, subset=[col, outlier_col])
         data_table[outlier_col] = data_table[outlier_col].astype('bool')
         f, xar = plot.subplots()
-        plot.hold(True)
+        # plot.hold(True)
         xfmt = md.DateFormatter('%H:%M')
         xar.xaxis.set_major_formatter(xfmt)
         plot.xlabel('time')
@@ -101,7 +101,7 @@ class VisualizeDataset:
         xar.plot(data_table.index[data_table[outlier_col]], data_table[col][data_table[outlier_col]], 'r+')
         xar.plot(data_table.index[~data_table[outlier_col]], data_table[col][~data_table[outlier_col]], 'b+')
         plot.legend(['outlier ' + col, 'no outlier' + col], numpoints=1, fontsize='xx-small', loc='upper center',  ncol=2, fancybox=True, shadow=True)
-        plot.hold(False)
+        # plot.hold(False)
         plot.show()
 
     # Plot values that have been imputed using one of our imputation approaches. Here, values expresses the
@@ -118,7 +118,7 @@ class VisualizeDataset:
             xar = [xar]
 
         f.subplots_adjust(hspace=0.4)
-        plot.hold(True)
+        # plot.hold(True)
 
         # plot the regular dataset.
 
@@ -136,7 +136,7 @@ class VisualizeDataset:
         # Diplay is nicely in subplots.
         plot.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
         plot.xlabel('time')
-        plot.hold(False)
+        # plot.hold(False)
         plot.show()
 
     # This function plots clusters that result from the application of a clustering algorithm
@@ -183,7 +183,7 @@ class VisualizeDataset:
             color_index += 1
 
         plot.legend(handles, labels, fontsize='xx-small', numpoints=1)
-        plot.hold(False)
+        # plot.hold(False)
         plot.show()
 
     # This function plots the silhouettes of the different clusters that have been identified. It plots the
@@ -278,7 +278,7 @@ class VisualizeDataset:
 
         # Plot the values, training set cases in blue, test set in red.
         f, xar = plot.subplots()
-        plot.hold(True)
+        # plot.hold(True)
         xfmt = md.DateFormatter('%H:%M')
         xar.xaxis.set_major_formatter(xfmt)
         xar.plot(train_time, train_y, '-', linewidth=0.5)
@@ -304,7 +304,7 @@ class VisualizeDataset:
         plot.annotate('training set', xy=(train_time[int(float(len(train_time))/2)], y_coord_labels*1.02), color='blue', xycoords='data', ha='center')
         plot.annotate('', xy=(test_time[0], y_coord_labels), xycoords='data', xytext=(test_time[-1], y_coord_labels), textcoords='data', arrowprops={'arrowstyle': '<->'})
         plot.annotate('test set', xy=(test_time[int(float(len(test_time))/2)], y_coord_labels*1.02), color='red', xycoords='data', ha='center')
-        plot.hold(False)
+        # plot.hold(False)
         plot.show()
 
     # Plot the Pareto front for multi objective optimization problems (for the dynamical systems stuff). We consider the
@@ -318,7 +318,7 @@ class VisualizeDataset:
         for row in dynsys_output:
             fit_1_train.append(row[1][0])
             fit_2_train.append(row[1][1])
-        plot.hold(True)
+        # plot.hold(True)
 
         plot.scatter(fit_1_train, fit_2_train, color='r')
         plot.xlabel('mse on ' + str(dynsys_output[0][0].columns[0]))
@@ -340,7 +340,7 @@ class VisualizeDataset:
 
     def plot_performances(self, algs, feature_subset_names, scores_over_all_algs, ylim, std_mult, y_name):
 
-        plot.hold(True)
+        # plot.hold(True)
         width = float(1)/(len(feature_subset_names)+1)
         ind = np.arange(len(algs))
         for i in range(0, len(feature_subset_names)):
