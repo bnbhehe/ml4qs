@@ -12,8 +12,12 @@ import math
 import sys
 import dateutil
 import pylab
+import os 
 class VisualizeDataset:
 
+    figures_path ='./figures'
+    if not os.path.exists(figures_path):
+        os.mkdir(figures_path)
     point_displays = ['+', 'x'] #'*', 'd', 'o', 's', '<', '>']
     line_displays = ['-'] #, '--', ':', '-.']
     colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
@@ -63,11 +67,12 @@ class VisualizeDataset:
                 else:
                     xar[i].plot(data_table.index[mask], data_table[relevant_dataset_cols[j]][mask], self.line_displays[j%len(self.line_displays)])
             xar[i].tick_params(axis='y', labelsize=10)
-            xar[i].legend(relevant_dataset_cols, fontsize='small', numpoints=1, loc='upper center',  bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_dataset_cols), fancybox=True, shadow=True)
+            xar[i].legend(relevant_dataset_cols, fontsize='medium', numpoints=1, loc='upper center',  bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_dataset_cols), fancybox=True, shadow=True)
             xar[i].set_ylim([min(min_values) - 0.1*(max(max_values) - min(min_values)), max(max_values) + 0.1*(max(max_values) - min(min_values))])
         # Make sure we get a nice figure with only a single x-axis and labels there.
         plot.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
         plot.xlabel('time')
+        plot.savefig(os.path.join(figures_path,str(columns)))
         plot.show()
 
     def plot_dataset_boxplot(self, dataset, cols):
