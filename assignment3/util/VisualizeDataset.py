@@ -72,7 +72,7 @@ class VisualizeDataset:
         # Make sure we get a nice figure with only a single x-axis and labels there.
         plot.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
         plot.xlabel('time')
-        plot.savefig(os.path.join(figures_path,str(columns)))
+        plot.savefig(os.path.join(figures_path,'_data.png'))
         plot.show()
 
     def plot_dataset_boxplot(self, dataset, cols):
