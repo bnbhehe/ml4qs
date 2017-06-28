@@ -13,11 +13,14 @@ import sys
 import dateutil
 import pylab
 import os 
+
+figures_path ='./figures'
+if not os.path.exists(figures_path):
+    os.mkdir(figures_path)
 class VisualizeDataset:
 
-    figures_path ='./figures'
-    if not os.path.exists(figures_path):
-        os.mkdir(figures_path)
+
+
     point_displays = ['+', 'x'] #'*', 'd', 'o', 's', '<', '>']
     line_displays = ['-'] #, '--', ':', '-.']
     colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
